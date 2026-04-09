@@ -17,6 +17,7 @@ const BookService = () => {
     // Preserve exact state variable and shape
     const [formData, setFormData] = useState({ vehicleId: '', serviceType: '', bookingDate: '' });
     const [loading, setLoading] = useState(true);
+    const [isBooking, setIsBooking] = useState(false);
     const [error, setError] = useState('');
 
     // 1. Load user's vehicles directly from the role-filtered API - Preserving logic
@@ -47,6 +48,7 @@ const BookService = () => {
         }
 
         try {
+            setIsBooking(true);
             // Find the selected vehicle full object to extract the correct customerId
             let selectedCustomer = '';
             for (let i = 0; i < vehicles.length; i++) {
@@ -58,6 +60,7 @@ const BookService = () => {
             }
 
             if (!selectedCustomer) {
+                setIsBooking(false);
                 throw new Error("Missing owner information for this vehicle.");
             }
 
@@ -69,6 +72,7 @@ const BookService = () => {
             // Redirect to history upon success
             navigate('/dashboard/bookings');
         } catch (err) {
+            setIsBooking(false);
             setError(err.response?.data?.message || "Booking failed. Ensure all fields are valid.");
         }
     };
@@ -222,11 +226,20 @@ const BookService = () => {
                             type="submit" 
                             variant="primary"
                             size="lg"
-                            disabled={vehicles.length === 0}
-                            className="w-full shadow-glow-cyan-sm mt-4 uppercase tracking-widest font-black"
+                            disabled={vehicles.length === 0 || isBooking}
+                            className={`w-full shadow-glow-cyan-sm mt-4 uppercase tracking-widest font-black ${isBooking ? 'opacity-80' : ''}`}
                         >
-                            <CheckCircle size={20} className="mr-2" />
-                            <span>Schedule Booking</span>
+                            {isBooking ? (
+                                <>
+                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3"></div>
+                                    <span>Syncing with Garage...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <CheckCircle size={20} className="mr-2" />
+                                    <span>Schedule Booking</span>
+                                </>
+                            )}
                         </Button>
                     </form>
                   </Card>

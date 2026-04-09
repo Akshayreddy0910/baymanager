@@ -71,7 +71,8 @@ export const createBooking = async (req, res) => {
                     <p>Thank you for choosing BayManager!</p>
                 </div>
             `;
-            await sendEmail(customer.email, "Booking Confirmed - BayManager", htmlContent);
+            // Sending in background to prevent UI hanging on slow SMTP/network
+            sendEmail(customer.email, "Booking Confirmed - BayManager", htmlContent);
         }
     } catch (mailErr) {
         console.error("Notification Error:", mailErr.message);
