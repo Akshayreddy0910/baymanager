@@ -47,7 +47,13 @@ const Navbar = () => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="flex items-center gap-3 cursor-pointer group" 
-            onClick={() => navigate('/')}
+            onClick={() => {
+              const dashPath = !user ? '/' : 
+                             user.role === 'admin' ? '/admin' : 
+                             user.role === 'staff' ? '/staff' : 
+                             '/dashboard';
+              navigate(dashPath);
+            }}
           >
             <div className="bg-blue-600 p-2 rounded-xl shadow-glow-blue-sm group-hover:rotate-12 transition-transform duration-500">
               <Cog className="text-white" size={20} />
