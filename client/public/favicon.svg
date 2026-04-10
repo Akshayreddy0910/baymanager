@@ -1,35 +1,51 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <defs>
-    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    <!-- Realistic Metallic Chrome Gradient -->
+    <linearGradient id="chromeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#94a3b8;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f1f5f9;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#475569;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#cbd5e1;stop-opacity:1" />
     </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    
+    <!-- Deep Blue Core Gradient -->
+    <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
+    </radialGradient>
+
+    <!-- Glassy Reflection -->
+    <linearGradient id="glassReflect" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" />
+      <stop offset="50%" style="stop-color:#ffffff;stop-opacity:0" />
+    </linearGradient>
+
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5" />
     </filter>
   </defs>
 
-  <!-- Background Circle with Glow -->
-  <circle cx="50" cy="50" r="48" fill="#0f172a" stroke="#1e293b" stroke-width="2" />
-  
-  <!-- Outer Spinning Gear -->
-  <g filter="url(#glow)">
-    <path d="M50 20 L55 25 L65 25 L70 20 L80 30 L75 35 L75 45 L80 50 L70 60 L65 60 L55 65 L50 70 L45 65 L35 60 L30 60 L20 50 L25 45 L25 35 L20 30 L30 20 L35 25 L45 25 Z" 
-          fill="none" stroke="url(#blueGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-      <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s" repeatCount="indefinite" />
-    </path>
+  <!-- Background Base -->
+  <circle cx="50" cy="50" r="48" fill="url(#coreGrad)" stroke="#334155" stroke-width="0.5" />
+
+  <!-- Realistic Spinning Gear -->
+  <g filter="url(#shadow)">
+    <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="12s" repeatCount="indefinite" />
+    <path d="M50 15 L53 22 L60 22 L63 15 L72 18 L70 25 L76 29 L82 25 L85 33 L78 37 L80 44 L87 47 L87 53 L80 56 L78 63 L85 67 L82 75 L76 71 L70 75 L72 82 L63 85 L60 78 L53 78 L50 85 L41 82 L43 75 L37 71 L31 75 L28 67 L35 63 L33 56 L26 53 L26 47 L33 44 L35 37 L28 33 L31 25 L37 29 L43 25 L41 18 Z" 
+          fill="url(#chromeGrad)" />
+    <circle cx="50" cy="50" r="28" fill="url(#coreGrad)" stroke="#1e293b" stroke-width="1" />
   </g>
 
-  <!-- Inner Pulsing Car Silhouette -->
-  <path d="M30 60 L35 55 L65 55 L70 60 L75 60 L75 65 L25 65 L25 60 Z M35 55 L40 45 L60 45 L65 55 Z" 
-        fill="white" opacity="0.9">
-    <animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite" />
-  </path>
+  <!-- Realistic Car Icon -->
+  <g transform="translate(30, 38) scale(0.4)">
+    <path d="M10 50 L20 30 C25 20, 75 20, 80 30 L90 50 L95 50 C98 50, 98 60, 95 60 L5 60 C2 60, 2 50, 5 50 Z" fill="#ffffff">
+       <animate attributeName="opacity" values="0.7;1;0.7" dur="4s" repeatCount="indefinite" />
+    </path>
+    <rect x="25" y="55" width="10" height="10" rx="5" fill="#3b82f6" />
+    <rect x="65" y="55" width="10" height="10" rx="5" fill="#3b82f6" />
+  </g>
 
-  <!-- Moving Light Effect -->
-  <circle cx="0" cy="0" r="2" fill="white">
-    <animateMotion path="M20 20 L80 80 M80 20 L20 80" dur="4s" repeatCount="indefinite" />
-    <animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite" />
-  </circle>
+  <!-- Glass Top Overlay -->
+  <circle cx="50" cy="50" r="48" fill="url(#glassReflect)" pointer-events="none" />
 </svg>
