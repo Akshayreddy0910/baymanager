@@ -68,7 +68,7 @@ const MyBookings = () => {
           </div>
           <Button 
             variant="primary" 
-            onClick={() => navigate("/customer/book-service")}
+            onClick={() => navigate("/dashboard/book")}
             className="shadow-glow-cyan-sm uppercase font-black tracking-widest text-xs"
           >
             <Plus size={18} className="mr-2" />
@@ -90,7 +90,7 @@ const MyBookings = () => {
                </div>
                <h3 className="text-xl font-display font-bold text-slate-300">No history found</h3>
                <p className="text-slate-500 mt-2 mb-8 italic">You haven't booked any services yet.</p>
-               <Button variant="secondary" onClick={() => navigate("/customer/book-service")}>
+               <Button variant="secondary" onClick={() => navigate("/dashboard/book")}>
                   Schedule First Service
                </Button>
             </Card>
