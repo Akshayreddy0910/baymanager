@@ -3,7 +3,6 @@ import Customer from '../models/Customer.js';
 import { sendEmail } from '../config/mailer.js';
 import { getIO } from '../server.js';
 
-// Controller to get service type distribution using aggregation
 export const getServiceTypeDistribution = async (req, res) => {
     try {
         const pipeline = [
@@ -17,7 +16,6 @@ export const getServiceTypeDistribution = async (req, res) => {
     }
 };
 
-// Controller for customers to view only their own bookings
 export const getMyBookings = async (req, res) => {
   try {
     const customerProfile = await Customer.findOne({ email: req.user.email });
@@ -35,7 +33,6 @@ export const getMyBookings = async (req, res) => {
   }
 };
 
-// Controller to create a new service booking
 export const createBooking = async (req, res) => {
   try {
     const { customerId, vehicleId, serviceType, bookingDate } = req.body;
@@ -71,7 +68,6 @@ export const createBooking = async (req, res) => {
                     <p>Thank you for choosing BayManager!</p>
                 </div>
             `;
-            // Sending in background to prevent UI hanging on slow SMTP/network
             sendEmail(customer.email, "Booking Confirmed - BayManager", htmlContent);
         }
     } catch (mailErr) {

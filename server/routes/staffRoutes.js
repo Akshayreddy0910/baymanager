@@ -10,7 +10,6 @@ import { authorizeRoles } from '../middleware/roleMiddleware.js';
 
 const router = express.Router();
 
-// Only Admins can manage the staff team
 router.use(protect);
 router.use(authorizeRoles('admin'));
 

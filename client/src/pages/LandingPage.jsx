@@ -7,19 +7,13 @@ import Hero3DScene from "../components/Hero3DScene.jsx";
 const LandingPage = () => {
   return (
     <div className="min-h-screen bg-slate-950 font-sans overflow-x-hidden selection:bg-blue-500/30">
-      {/* 
-        HERO SECTION 
-        Premium dark theme hero with a sleek modern vibe
-      */}
       <section className="relative bg-slate-950 pt-32 lg:pt-48 pb-32 lg:pb-48 overflow-hidden">
-        {/* Abstract animated glowing background elements */}
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-600/20 rounded-full mix-blend-screen filter blur-[128px] animate-pulse pointer-events-none"></div>
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-indigo-600/20 rounded-full mix-blend-screen filter blur-[128px] animate-pulse pointer-events-none" style={{ animationDelay: '2s' }}></div>
         
         <div className="max-w-7xl mx-auto px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             
-            {/* LEFT COLUMN: HERO CONTENT */}
             <motion.div 
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -53,7 +47,6 @@ const LandingPage = () => {
               </div>
             </motion.div>
 
-            {/* RIGHT COLUMN: 3D SCENE */}
             <motion.div 
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -94,9 +87,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* 
-        ROLES SECTION (Animated Cards)
-      */}
       <section className="py-48 bg-slate-900/30 relative">
         <div className="max-w-7xl mx-auto px-8 relative z-10">
           <div className="text-center mb-32">
@@ -105,7 +95,6 @@ const LandingPage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {/* Customer Role */}
             <motion.div 
                whileHover={{ y: -10 }}
                className="bg-slate-900/50 backdrop-blur-xl rounded-[3rem] p-12 border border-slate-800/50 hover:border-blue-500/30 transition-all duration-500 group shadow-lg"
@@ -124,7 +113,6 @@ const LandingPage = () => {
                </ul>
             </motion.div>
 
-            {/* Admin Role */}
             <motion.div 
                whileHover={{ y: -10 }}
                className="bg-slate-900/50 backdrop-blur-xl rounded-[3rem] p-12 border border-slate-800/50 hover:border-purple-500/30 transition-all duration-500 group shadow-lg"
@@ -143,7 +131,6 @@ const LandingPage = () => {
                </ul>
             </motion.div>
 
-            {/* Staff Role */}
             <motion.div 
                whileHover={{ y: -10 }}
                className="bg-slate-900/50 backdrop-blur-xl rounded-[3rem] p-12 border border-slate-800/50 hover:border-emerald-500/30 transition-all duration-500 group shadow-lg"
@@ -165,7 +152,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="bg-slate-950 border-t border-slate-900 py-24 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-800 to-transparent" />
         <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-10">

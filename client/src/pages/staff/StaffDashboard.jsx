@@ -10,7 +10,7 @@ import Button from "../../components/ui/Button.jsx";
 
 const StaffDashboard = () => {
   const [activeJobs, setActiveJobs] = useState([]);
-  const [allJobs, setAllJobs] = useState([]); // Added to track full history for stats
+  const [allJobs, setAllJobs] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   
@@ -18,7 +18,6 @@ const StaffDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Tailwind purge safety: lookup object for dynamic colors
   const colorClasses = {
     cyan:    { bg: "bg-cyan-400/10",    border: "border-cyan-400/20",    text: "text-cyan-400" },
     amber:   { bg: "bg-amber-400/10",   border: "border-amber-400/20",   text: "text-amber-400" },
@@ -27,17 +26,14 @@ const StaffDashboard = () => {
     rose:    { bg: "bg-rose-500/10",    border: "border-rose-500/20",    text: "text-rose-400" },
   };
 
-  // 1. Fetch mechanic specific jobs
   const loadJobs = async () => {
     try {
       const jobs = await getMyJobCards();
-      setAllJobs(jobs); // Keep full list for stats
+      setAllJobs(jobs);
       
-      // Filter out completed jobs
       const active = jobs.filter(job => job.status !== 'Completed');
       setActiveJobs(active);
 
-      // Create notifications based on active jobs (e.g. recently updated or pending ones)
       setNotifications(active.map(job => ({
           id: job._id,
           title: `New Assignment: ${job.bookingId?.vehicleId?.model || 'Vehicle'}`,
@@ -56,7 +52,6 @@ const StaffDashboard = () => {
     loadJobs();
   }, []);
 
-  // Compute stats via for loops as per design requirements
   const [statCards, setStatCards] = useState([]);
 
   useEffect(() => {
@@ -80,12 +75,10 @@ const StaffDashboard = () => {
     setStatCards(cards);
   }, [allJobs]);
 
-  // 2. Real-time Notification listener
   useEffect(() => {
     if (!socket || !user) return;
 
     const handleNewJobCard = (newJC) => {
-        // Only notify if the new job card is assigned to this exact mechanic
         const mId = newJC.mechanicId?._id || newJC.mechanicId?.id || newJC.mechanicId;
         const myId = user?._id || user?.id;
         
@@ -133,8 +126,6 @@ const StaffDashboard = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* ===== HEADER ===== */}
-        {/* Wrapped in motion.div for entry animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -152,8 +143,6 @@ const StaffDashboard = () => {
           </div>
         </motion.div>
         
-        {/* ===== STAT CARDS (3 cards) ===== */}
-        {/* Stat cards are staggered using the delay computed in the for loop logic */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           {statCards.map((card, i) => {
             const Icon = card.icon;
@@ -183,8 +172,6 @@ const StaffDashboard = () => {
           })}
         </div>
         
-        {/* ===== QUICK ACTIONS SECTION ===== */}
-        {/* Staggered section entrance */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -197,7 +184,6 @@ const StaffDashboard = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            {/* Action card 1: View My Job Cards */}
             <Card 
               className="hover:shadow-glow-cyan-sm hover:border-cyan-400/50 
                          hover:-translate-y-1 transition-all duration-300 
@@ -222,7 +208,6 @@ const StaffDashboard = () => {
               </div>
             </Card>
             
-            {/* Action card 2: My Ratings (from feedback system) */}
             <Card 
               className="hover:shadow-glow-cyan-sm hover:border-amber-400/50 
                          hover:-translate-y-1 transition-all duration-300 
@@ -249,8 +234,6 @@ const StaffDashboard = () => {
           </div>
         </motion.div>
 
-        {/* ===== NOTIFICATIONS SECTION ===== */}
-        {/* Repurposing the notifications list with the new theme */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}

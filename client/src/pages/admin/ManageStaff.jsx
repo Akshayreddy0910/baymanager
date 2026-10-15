@@ -8,7 +8,6 @@ import Button from "../../components/ui/Button.jsx";
 import Input from "../../components/ui/Input.jsx";
 
 const ManageStaff = () => {
-  // 1. Data and State - Preserving existing names
   const [staff, setStaff] = useState([]);
   const [loading, setLoading] = useState(true);
   const socket = useSocket();
@@ -17,7 +16,6 @@ const ManageStaff = () => {
   const [editingStaff, setEditingStaff] = useState(null);
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
 
-  // 1. Initial Load - Preserving logic
   const loadData = async () => {
     try {
       const data = await getAllStaff();
@@ -31,7 +29,6 @@ const ManageStaff = () => {
 
   useEffect(() => { loadData(); }, []);
 
-  // 2. Real-time Synchronization - Preserving byte-for-byte identical logic
   useEffect(() => {
     if (!socket) return;
 
@@ -77,7 +74,6 @@ const ManageStaff = () => {
     };
   }, [socket, staff]);
 
-  // 3. Form Handling - Preserving logic
   const openModal = (member = null) => {
     if (member) {
       setEditingStaff(member);
@@ -125,7 +121,6 @@ const ManageStaff = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* ===== HEADER ===== */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -151,7 +146,6 @@ const ManageStaff = () => {
           </Button>
         </motion.div>
 
-        {/* ===== STAFF GRID ===== */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -208,7 +202,6 @@ const ManageStaff = () => {
           )}
         </motion.div>
 
-        {/* ===== MODAL ===== */}
         <AnimatePresence>
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-6">

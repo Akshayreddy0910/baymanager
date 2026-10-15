@@ -1,9 +1,5 @@
 import { motion } from "framer-motion";
 
-/**
- * Reusable Card Component
- * A premium container with glassmorphism effects and subtle hover shadows.
- */
 const Card = ({ children, className = "", noPadding = false }) => {
   return (
     <motion.div

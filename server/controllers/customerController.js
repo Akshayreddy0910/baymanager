@@ -3,7 +3,6 @@ import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import { getIO } from '../server.js';
 
-// Controller to add a new customer and automatically create a login account
 export const addCustomer = async (req, res) => {
   try {
     const io = getIO();
@@ -96,7 +95,6 @@ export const updateCustomer = async (req, res) => {
     const oldEmail = customer.email;
     const { name, phone, email, address, password } = req.body;
 
-    // 1. Update Customer Record
     customer.name = name || customer.name;
     customer.phone = phone || customer.phone;
     customer.address = address || customer.address;
@@ -107,7 +105,6 @@ export const updateCustomer = async (req, res) => {
     
     await customer.save();
 
-    // 2. Synchronize with User Record (Credentials)
     const user = await User.findOne({ email: oldEmail });
     if (user) {
         if (name) user.name = name;
@@ -119,7 +116,6 @@ export const updateCustomer = async (req, res) => {
         await user.save();
     }
 
-    // Real-time notification for updates
     const io = getIO();
     if (io) {
         io.emit("customer:updated", customer);
@@ -140,10 +136,8 @@ export const deleteCustomer = async (req, res) => {
 
     const emailToDelete = customer.email;
 
-    // 1. Delete Customer Profile
     await Customer.findByIdAndDelete(req.params.id);
 
-    // 2. Delete Associated Login Account
     await User.findOneAndDelete({ email: emailToDelete });
 
     const io = getIO();

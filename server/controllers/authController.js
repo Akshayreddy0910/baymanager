@@ -3,12 +3,10 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import { isValidEmail } from '../utils/validators.js';
 
-// Controller function to handle new user registration
 export const registerUser = async (req, res) => {
   try {
     const { name, email, phone, password, role } = req.body;
 
-    // --- VALIDATIONS ---
     if (!name || !name.trim()) {
         return res.status(400).json({ message: 'Full name is required' });
     }
@@ -28,7 +26,6 @@ export const registerUser = async (req, res) => {
         return res.status(400).json({ message: 'Password must be at least 6 characters long' });
     }
 
-    // Normalize email to lowercase
     const normalizedEmail = email.toLowerCase().trim();
 
     const userExists = await User.findOne({ email: normalizedEmail });
@@ -46,7 +43,6 @@ export const registerUser = async (req, res) => {
       role: role || 'customer',
     });
 
-    // If the new user is a customer, create their Customer profile record immediately
     if (newUser.role === 'customer') {
         try {
             const Customer = (await import('../models/Customer.js')).default;
@@ -57,7 +53,6 @@ export const registerUser = async (req, res) => {
             });
         } catch (customerErr) {
             console.error("Auto-Customer profile creation failed:", customerErr.message);
-            // We don't fail registration here, but the user is created.
         }
     }
 
@@ -76,12 +71,10 @@ export const registerUser = async (req, res) => {
   }
 };
 
-// Controller function to handle user login
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // --- VALIDATIONS ---
     if (!email || !email.trim()) {
         return res.status(400).json({ message: 'Email address is required' });
     }

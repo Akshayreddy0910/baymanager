@@ -5,18 +5,11 @@ import Card from "../../components/ui/Card.jsx";
 import StarRating from "../../components/ui/StarRating.jsx";
 import { getMechanicFeedback } from "../../services/feedbackService.js";
 
-/**
- * MyRatings Page (Staff/Mechanic)
- * Allows mechanics to view their personal performance metrics, average ratings,
- * and a chronological feed of customer feedback specific to their work.
- */
 const MyRatings = () => {
-  // 1. Data and lifecycle state
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // 2. Fetch personal feedback data on mount
   useEffect(() => {
     const fetchMyPerformance = async () => {
       try {
@@ -31,7 +24,6 @@ const MyRatings = () => {
     fetchMyPerformance();
   }, []);
 
-  // Standardized premium loading state
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-8">
@@ -48,7 +40,6 @@ const MyRatings = () => {
     );
   }
 
-  // Error handling view
   if (error) {
     return (
       <div className="min-h-screen bg-slate-950 p-8 flex items-center justify-center">
@@ -61,7 +52,6 @@ const MyRatings = () => {
     );
   }
 
-  // 3. Handle data exists check
   if (!data || data.summary.totalReviews === 0) {
     return (
       <div className="min-h-screen bg-slate-950 p-8 md:p-24 flex items-center justify-center">
@@ -92,7 +82,6 @@ const MyRatings = () => {
     <div className="min-h-screen bg-slate-950 p-6 md:p-12 text-slate-100">
       <div className="max-w-4xl mx-auto">
         
-        {/* Page Header */}
         <motion.header 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -106,14 +95,12 @@ const MyRatings = () => {
           </p>
         </motion.header>
 
-        {/* Hero Performance Card */}
         <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: "spring", stiffness: 100 }}
         >
             <Card className="text-center py-12 md:py-20 mb-12 shadow-glow-cyan-sm relative overflow-hidden group">
-                {/* Abstract background flourish */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:bg-cyan-500/20 transition-all duration-700"></div>
 
                 <div className="relative z-10">
@@ -142,7 +129,6 @@ const MyRatings = () => {
             </Card>
         </motion.div>
 
-        {/* Detailed Reviews Feed */}
         <section className="space-y-8 mb-20">
             <div className="flex items-center justify-between mb-2">
                 <h2 className="text-2xl font-display font-bold text-slate-200 tracking-tight">Recent Bay Reviews</h2>

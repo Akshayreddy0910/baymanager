@@ -14,12 +14,10 @@ const router = express.Router();
 
 router.use(protect);
 
-// Allow customers to fetch their own bookings
 router.get('/my', authorizeRoles('customer'), getMyBookings);
 
 router.post('/', authorizeRoles('customer', 'admin'), createBooking);
 
-// Administrators only for global list
 router.get('/', authorizeRoles('admin'), getAllBookings);
 
 router.get('/:id', authorizeRoles('admin', 'customer'), getBookingById);

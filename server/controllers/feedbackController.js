@@ -4,16 +4,10 @@ import Booking from "../models/Booking.js";
 import Customer from "../models/Customer.js";
 import mongoose from "mongoose";
 
-/**
- * submitFeedback
- * Allows a customer to review a completed service.
- * Performs deep ownership validation: JobCard -> Booking -> Customer -> Auth Email check.
- */
 export const submitFeedback = async (req, res) => {
   try {
     const { jobCardId, garageRating, mechanicRating, comment, wouldRecommend } = req.body;
 
-    // --- 1. Required Fields Validation (using for loop for manual check) ---
     const required = ["jobCardId", "garageRating", "mechanicRating"];
     const missing = [];
     for (let i = 0; i < required.length; i++) {
@@ -25,12 +19,10 @@ export const submitFeedback = async (req, res) => {
         return res.status(400).json({ message: "Missing required fields", missing });
     }
 
-    // --- 2. Numerical Rating Range Validation ---
     if (garageRating < 1 || garageRating > 5 || mechanicRating < 1 || mechanicRating > 5) {
         return res.status(400).json({ message: "Ratings must be integers between 1 and 5" });
     }
 
-    // --- 3. Job Existence and Status Validation ---
     const jobCard = await JobCard.findById(jobCardId);
     if (!jobCard) {
         return res.status(404).json({ message: "Job card not found" });
@@ -39,14 +31,11 @@ export const submitFeedback = async (req, res) => {
         return res.status(400).json({ message: "Feedback can only be submitted for completed jobs" });
     }
 
-    // --- 4. Deep Ownership Verification ---
-    // Why: We must ensure Customer A isn't reviewing Customer B's car repair.
     const booking = await Booking.findById(jobCard.bookingId);
     if (!booking) {
         return res.status(404).json({ message: "Associated booking not found" });
     }
 
-    // Fetch the operational Customer record by the email logged in the current JWT session
     const customerProfile = await Customer.findOne({ 
         email: { $regex: new RegExp("^" + req.user.email + "$", "i") } 
     });
@@ -55,13 +44,11 @@ export const submitFeedback = async (req, res) => {
         return res.status(403).json({ message: "You cannot submit feedback for a job that doesn't belong to you" });
     }
 
-    // --- 5. Duplicate Submission Prevention ---
     const existing = await Feedback.findOne({ jobCardId });
     if (existing) {
         return res.status(400).json({ message: "You have already submitted feedback for this job" });
     }
 
-    // --- 6. Persistence ---
     const feedback = new Feedback({
       jobCardId,
       customerId: customerProfile._id,
@@ -83,10 +70,6 @@ export const submitFeedback = async (req, res) => {
   }
 };
 
-/**
- * getAllFeedback (Admin Only)
- * Aggregates all global feedback for administrative oversight.
- */
 export const getAllFeedback = async (req, res) => {
   try {
     const feedbacks = await Feedback.find()
@@ -104,10 +87,6 @@ export const getAllFeedback = async (req, res) => {
   }
 };
 
-/**
- * getMyFeedback (Customer Only)
- * Allows customers to see their history of submitted reviews.
- */
 export const getMyFeedback = async (req, res) => {
   try {
     const customerProfile = await Customer.findOne({ 
@@ -131,13 +110,8 @@ export const getMyFeedback = async (req, res) => {
   }
 };
 
-/**
- * getMechanicFeedback (Staff Only)
- * Provides personal performance metrics to mechanics based on their assigned jobs.
- */
 export const getMechanicFeedback = async (req, res) => {
   try {
-    // req.user._id is the User ID of the logged-in mechanic
     const feedbacks = await Feedback.find({ mechanicId: req.user.id || req.user._id })
       .sort({ createdAt: -1 })
       .populate("customerId", "name")
@@ -146,7 +120,6 @@ export const getMechanicFeedback = async (req, res) => {
         populate: { path: "bookingId", select: "serviceType" }
       });
 
-    // --- Summary Computation using 'for' loop for manual aggregation ---
     let totalReviews = feedbacks.length;
     let sumRating = 0;
     for (let i = 0; i < feedbacks.length; i++) {
@@ -167,17 +140,11 @@ export const getMechanicFeedback = async (req, res) => {
   }
 };
 
-/**
- * getFeedbackStats (Admin Only)
- * Sophisticated analytical endpoint using MongoDB $facet aggregation pipeline.
- * Computes overall averages, mechanic leaderboard, rating distribution, and recency in one call.
- */
 export const getFeedbackStats = async (req, res) => {
   try {
     const stats = await Feedback.aggregate([
       {
         $facet: {
-          // --- Overarching summary variables ---
           overall: [
             {
               $group: {
@@ -191,7 +158,6 @@ export const getFeedbackStats = async (req, res) => {
               }
             }
           ],
-          // --- Rankings for staff performance analysis ---
           mechanicLeaderboard: [
             {
               $group: {
@@ -221,7 +187,6 @@ export const getFeedbackStats = async (req, res) => {
               }
             }
           ],
-          // --- Frequency counts for service rating levels (1-5 star) ---
           ratingDistribution: [
             {
               $group: {
@@ -231,7 +196,6 @@ export const getFeedbackStats = async (req, res) => {
             },
             { $sort: { _id: -1 } }
           ],
-          // --- Real-time activity feed preview ---
           recentFeedbacks: [
             { $sort: { createdAt: -1 } },
             { $limit: 5 },
@@ -271,7 +235,6 @@ export const getFeedbackStats = async (req, res) => {
 
     const result = stats[0];
 
-    // --- Fallback handling for new/empty systems ---
     if (!result.overall || result.overall.length === 0) {
       return res.status(200).json({
         overall: { totalFeedbacks: 0, avgGarageRating: 0, avgMechanicRating: 0, recommendPercentage: 0 },
@@ -302,10 +265,6 @@ export const getFeedbackStats = async (req, res) => {
   }
 };
 
-/**
- * checkFeedbackExists
- * Helper for the frontend UI to toggle review visibility buttons.
- */
 export const checkFeedbackExists = async (req, res) => {
   try {
     const { jobCardId } = req.params;

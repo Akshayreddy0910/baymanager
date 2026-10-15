@@ -4,7 +4,6 @@ import JobCard from '../models/JobCard.js';
 import Booking from '../models/Booking.js';
 import { isValidCost, isValidObjectId } from '../utils/validators.js';
 
-// Revenue Statistics
 export const getRevenueStats = async (req, res) => {
   try {
     const totalRevenuePipeline = [
@@ -35,12 +34,10 @@ export const getRevenueStats = async (req, res) => {
   }
 };
 
-// Create a new invoice (Admin only)
 export const createInvoice = async (req, res) => {
   try {
     const { jobCardId, serviceCost, laborCost } = req.body;
 
-    // --- VALIDATIONS ---
     if (!jobCardId) {
         return res.status(400).json({ message: 'Please select a Job Card to bill against' });
     }
@@ -60,7 +57,6 @@ export const createInvoice = async (req, res) => {
         return res.status(400).json({ message: 'Labor cost must be a valid non-negative number' });
     }
 
-    // Check the job card exists
     const jobCardExists = await JobCard.findById(jobCardId);
     if (!jobCardExists) {
         return res.status(404).json({ message: 'The selected Job Card does not exist' });

@@ -13,7 +13,6 @@ import Button from "../../components/ui/Button.jsx";
 import Input from "../../components/ui/Input.jsx";
 
 const ManageJobCards = () => {
-  // 1. Data and State - Preserving existing names
   const [jobCards, setJobCards] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [staff, setStaff] = useState([]); 
@@ -28,14 +27,12 @@ const ManageJobCards = () => {
     tasks: [] 
   });
 
-  // Design System: Status and Color Styles
   const statusStyles = {
     'Pending':    { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/20", icon: Clock },
     'In Progress': { text: "text-blue-400",  bg: "bg-blue-400/10",  border: "border-blue-400/20",  icon: Wrench },
     'Completed':  { text: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/20", icon: CheckCircle },
   };
 
-  // 1. Fetch required data from backend - Preserving parallel fetch logic
   const loadData = async () => {
     try {
       const [jcResponse, bResponse, sResponse] = await Promise.all([
@@ -56,7 +53,6 @@ const ManageJobCards = () => {
 
   useEffect(() => { loadData(); }, []);
 
-  // 2. Real-time Synchronization - Preserving byte-for-byte identical logic
   useEffect(() => {
     if (!socket) return;
 
@@ -90,7 +86,6 @@ const ManageJobCards = () => {
     };
   }, [socket]);
 
-  // 3. Automated Task Generation - Preserving logic
   const handleBookingChange = (bId) => {
       let autoTask = [];
       const found = bookings.find(b => b._id === bId);
@@ -105,7 +100,6 @@ const ManageJobCards = () => {
       });
   };
 
-  // 4. Task Management Logic - Preserving logic
   const addTask = () => {
       if (formData.newTaskDescription.trim()) {
           setFormData({
@@ -121,7 +115,6 @@ const ManageJobCards = () => {
       setFormData({ ...formData, tasks: updatedTasks });
   };
 
-  // 5. Save Logic - Preserving logic
   const handleSave = async (e) => {
     e.preventDefault();
     try {
@@ -158,7 +151,6 @@ const ManageJobCards = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* ===== HEADER ===== */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -184,7 +176,6 @@ const ManageJobCards = () => {
           </Button>
         </motion.div>
 
-        {/* ===== JOB CARDS GRID ===== */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -288,7 +279,6 @@ const ManageJobCards = () => {
           )}
         </motion.div>
 
-        {/* ===== CREATION MODAL ===== */}
         <AnimatePresence>
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-6">

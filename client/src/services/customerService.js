@@ -1,6 +1,5 @@
 import api from './api.js';
 
-// Service to handle all customer-related API calls
 export const getAllCustomers = async () => {
   const response = await api.get('/customers');
   return response.data;

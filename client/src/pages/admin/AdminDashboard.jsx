@@ -13,7 +13,6 @@ import Card from "../../components/ui/Card.jsx";
 import Button from "../../components/ui/Button.jsx";
 
 const AdminDashboard = () => {
-  // 1. State to track the count of different records - Preserving existing names
   const [stats, setStats] = useState({
     customers: 0,
     vehicles: 0,
@@ -23,7 +22,6 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Design System: Color lookup for consistent aesthetics
   const colorClasses = {
     cyan:    { bg: "bg-cyan-400/10",    border: "border-cyan-400/20",    text: "text-cyan-400" },
     blue:    { bg: "bg-blue-400/10",    border: "border-blue-400/20",    text: "text-blue-400" },
@@ -33,7 +31,6 @@ const AdminDashboard = () => {
     purple:  { bg: "bg-purple-400/10",  border: "border-purple-400/20",  text: "text-purple-400" },
   };
 
-  // 2. Fetch all counts on component mount - Preserving logic
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -66,7 +63,6 @@ const AdminDashboard = () => {
     </div>
   );
 
-  // 3. Define the cards to be displayed - Using colorClasses for rich aesthetics
   const statCards = [
     { label: 'Customers', value: stats.customers, icon: Users, color: 'cyan', delay: 0.1, path: '/admin/customers' },
     { label: 'Vehicles',  value: stats.vehicles,  icon: Car,   color: 'blue', delay: 0.2, path: '/admin/vehicles' },
@@ -74,7 +70,6 @@ const AdminDashboard = () => {
     { label: 'Invoices',  value: stats.invoices,  icon: FileText, color: 'emerald', delay: 0.4, path: '/admin/invoices' }
   ];
 
-  // 4. Management Quick Links for Admin Control
   const mgmtLinks = [
     { label: "Manage Customers", desc: "Add and edit customer records",     icon: Users,         color: "cyan",    path: "/admin/customers" },
     { label: "Manage Vehicles",  desc: "Track vehicles per customer",       icon: Car,           color: "blue",    path: "/admin/vehicles" },
@@ -88,7 +83,6 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* ===== HEADER ===== */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -102,7 +96,6 @@ const AdminDashboard = () => {
           </p>
         </motion.div>
 
-        {/* ===== STATS GRID ===== */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
             {statCards.map((card, i) => {
                 const Icon = card.icon;
@@ -136,7 +129,6 @@ const AdminDashboard = () => {
             })}
         </div>
         
-        {/* ===== MANAGEMENT QUICK LINKS ===== */}
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -163,7 +155,6 @@ const AdminDashboard = () => {
                         >
                             <Link to={link.path}>
                                 <Card className="group relative overflow-hidden p-8 hover:border-slate-600 transition-all cursor-pointer">
-                                    {/* Glass gradient hover effect */}
                                     <div className="absolute inset-0 bg-gradient-to-br from-slate-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                                     
                                     <div className="relative z-10">
@@ -189,7 +180,6 @@ const AdminDashboard = () => {
             </div>
         </motion.div>
 
-        {/* Footer info */}
         <motion.div 
            initial={{ opacity: 0 }}
            animate={{ opacity: 1 }}

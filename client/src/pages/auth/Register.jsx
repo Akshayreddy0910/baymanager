@@ -8,7 +8,6 @@ import Button from "../../components/ui/Button.jsx";
 import Input from "../../components/ui/Input.jsx";
 
 const Register = () => {
-  // 1. State hooks for managing form input values
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -21,25 +20,20 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  // 2. Function to handle input changes for all fields dynamically
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // 3. Function to handle the registration submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
     try {
-      // Execute the registration request through our auth service
       await registerUser(formData);
 
-      // On successful registration, take the user to the login screen
       navigate('/login');
     } catch (err) {
-      // Display error message if registration fails
       setError(err.response?.data?.message || 'Registration failed. Try again.');
     } finally {
       setLoading(false);
@@ -48,7 +42,6 @@ const Register = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-slate-950 px-4 py-20 relative overflow-hidden font-sans">
-      {/* Dynamic Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500/10 blur-[120px] rounded-full" />

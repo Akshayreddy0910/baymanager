@@ -7,12 +7,10 @@ import Card from "../../components/ui/Card.jsx";
 import Button from "../../components/ui/Button.jsx";
 
 const ManageBookings = () => {
-  // 1. State and Data - Preserving existing names
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const socket = useSocket();
 
-  // Status mapping for consistent styling across the platform
   const statusStyles = {
     'Pending':    { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/20", icon: Clock },
     'Confirmed':  { text: "text-blue-400",  bg: "bg-blue-400/10",  border: "border-blue-400/20",  icon: CheckCircle },
@@ -20,7 +18,6 @@ const ManageBookings = () => {
     'Completed':  { text: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/20", icon: CheckCircle },
   };
 
-  // 1. Fetch data on load - Preserving logic
   const loadData = async () => {
     try {
       const data = await getAllBookings();
@@ -34,7 +31,6 @@ const ManageBookings = () => {
 
   useEffect(() => { loadData(); }, []);
 
-  // 2. Real-time Listeners - Preserving byte-for-byte logic
   useEffect(() => {
     if (!socket) return;
     
@@ -55,7 +51,6 @@ const ManageBookings = () => {
     };
   }, [socket]);
 
-  // 2. Handle simple status updates - Preserving logic
   const handleStatusUpdate = async (id, newStatus) => {
     try {
       await updateBookingStatus(id, newStatus);
@@ -83,7 +78,6 @@ const ManageBookings = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* ===== HEADER ===== */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -102,7 +96,6 @@ const ManageBookings = () => {
           </Button>
         </motion.div>
 
-        {/* ===== BOOKINGS TABLE ===== */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
