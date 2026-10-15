@@ -14,17 +14,14 @@ const BookService = () => {
     const navigate = useNavigate();
     
     const [vehicles, setVehicles] = useState([]);
-    // Preserve exact state variable and shape
     const [formData, setFormData] = useState({ vehicleId: '', serviceType: '', bookingDate: '' });
     const [loading, setLoading] = useState(true);
     const [isBooking, setIsBooking] = useState(false);
     const [error, setError] = useState('');
 
-    // 1. Load user's vehicles directly from the role-filtered API - Preserving logic
     useEffect(() => {
         const fetchVehicles = async () => {
             try {
-                // The backend API already filters vehicles by the logged-in customer's ID
                 const response = await getAllVehicles();
                 setVehicles(response);
                 setLoading(false);
@@ -37,7 +34,6 @@ const BookService = () => {
         fetchVehicles();
     }, []);
 
-    // 2. Handle Booking Submission - Preserving byte-for-byte logic
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -49,11 +45,9 @@ const BookService = () => {
 
         try {
             setIsBooking(true);
-            // Find the selected vehicle full object to extract the correct customerId
             let selectedCustomer = '';
             for (let i = 0; i < vehicles.length; i++) {
                 if (vehicles[i]._id === formData.vehicleId) {
-                    // Correctly access the customerId from the vehicle object
                     selectedCustomer = vehicles[i].customerId?._id || vehicles[i].customerId;
                     break;
                 }
@@ -69,7 +63,6 @@ const BookService = () => {
                 customerId: selectedCustomer
             });
 
-            // Redirect to history upon success
             navigate('/dashboard/bookings');
         } catch (err) {
             setIsBooking(false);
@@ -90,7 +83,6 @@ const BookService = () => {
         <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
             <div className="max-w-2xl mx-auto px-6 py-8">
                 
-                {/* Back Button */}
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -106,7 +98,6 @@ const BookService = () => {
                   </Button>
                 </motion.div>
 
-                {/* ===== HEADER ===== */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -121,7 +112,6 @@ const BookService = () => {
                   </p>
                 </motion.div>
 
-                {/* ===== ERROR STATE ===== */}
                 {error && (
                     <motion.div 
                       initial={{ opacity: 0, scale: 0.95 }} 
@@ -133,7 +123,6 @@ const BookService = () => {
                     </motion.div>
                 )}
 
-                {/* ===== FORM CARD ===== */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -141,7 +130,6 @@ const BookService = () => {
                 >
                   <Card className="border-slate-800 bg-slate-900/40">
                     <form onSubmit={handleSubmit} className="space-y-8">
-                        {/* Vehicle Selection */}
                         <div>
                             <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 ml-2 flex items-center gap-2">
                                 <Car size={14} className="text-cyan-400" />
@@ -173,7 +161,6 @@ const BookService = () => {
                             )}
                         </div>
 
-                        {/* Service Type Selection */}
                         <div>
                             <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 ml-2 flex items-center gap-2">
                                 <Wrench size={14} className="text-cyan-400" />
@@ -200,7 +187,6 @@ const BookService = () => {
                             </div>
                         </div>
 
-                        {/* Date Picker - Standardized with custom right icon */}
                         <div className="space-y-3">
                             <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2 flex items-center gap-2">
                                 <Calendar size={14} className="text-cyan-400" />
@@ -221,7 +207,6 @@ const BookService = () => {
                             </div>
                         </div>
 
-                        {/* Submit Button */}
                         <Button 
                             type="submit" 
                             variant="primary"
@@ -245,7 +230,6 @@ const BookService = () => {
                   </Card>
                 </motion.div>
                 
-                {/* Footer Metadata */}
                 <p className="mt-8 text-center text-[10px] font-mono text-slate-600 uppercase tracking-widest">
                   Secured & Reliable Automotive Management
                 </p>

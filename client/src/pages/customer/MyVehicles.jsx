@@ -8,7 +8,6 @@ const MyVehicles = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({ registrationNumber: '', model: '', year: '' });
 
-    // 1. Fetch my vehicles on load
     const loadData = async () => {
         try {
             const data = await getAllVehicles();
@@ -22,7 +21,6 @@ const MyVehicles = () => {
 
     useEffect(() => { loadData(); }, []);
 
-    // 2. Handle CRUD
     const handleSave = async (e) => {
         e.preventDefault();
         try {
@@ -66,7 +64,6 @@ const MyVehicles = () => {
                             {v.registrationNumber}
                         </div>
 
-                        {/* Visual flourish */}
                         <div className="absolute top-0 right-0 p-8 text-gray-50 opacity-10 group-hover:opacity-100 transition-opacity">
                             <Car size={120} />
                         </div>
@@ -83,7 +80,6 @@ const MyVehicles = () => {
                 )}
             </div>
 
-            {/* Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-6 z-50">
                     <div className="bg-white rounded-[3rem] w-full max-w-md p-10 shadow-2xl relative border border-gray-100">

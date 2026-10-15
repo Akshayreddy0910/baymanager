@@ -1,6 +1,5 @@
 import api from './api.js';
 
-// Service to handle all vehicle-related API calls
 export const getAllVehicles = async () => {
   const response = await api.get('/vehicles');
   return response.data;

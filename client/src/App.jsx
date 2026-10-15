@@ -1,12 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 
-// Auth & Public Pages
 import LandingPage from './pages/LandingPage.jsx';
 import Login from './pages/auth/Login.jsx';
 import Register from './pages/auth/Register.jsx';
 
-// Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard.jsx';
 import ManageCustomers from './pages/admin/ManageCustomers.jsx';
 import ManageVehicles from './pages/admin/ManageVehicles.jsx';
@@ -16,23 +14,19 @@ import ManageInvoices from './pages/admin/ManageInvoices.jsx';
 import Reports from './pages/admin/Reports.jsx';
 import ManageStaff from './pages/admin/ManageStaff.jsx';
 
-// Staff Pages
 import StaffDashboard from './pages/staff/StaffDashboard.jsx';
 import MyJobCards from './pages/staff/MyJobCards.jsx';
 
-// Customer Pages
 import CustomerDashboard from './pages/customer/CustomerDashboard.jsx';
 import BookService from './pages/customer/BookService.jsx';
 import MyBookings from './pages/customer/MyBookings.jsx';
 import MyInvoices from './pages/customer/MyInvoices.jsx';
-import MyVehicles from './pages/customer/MyVehicles.jsx'; // Added MyVehicles
+import MyVehicles from './pages/customer/MyVehicles.jsx';
 import GiveFeedback from './pages/customer/GiveFeedback.jsx';
 
-// Feedback Related Pages
 import FeedbackOverview from './pages/admin/FeedbackOverview.jsx';
 import MyRatings from './pages/staff/MyRatings.jsx';
 
-// UI Components
 import Navbar from './components/Navbar.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
@@ -48,7 +42,6 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<LandingPage />} />
 
-            {/* Admin Routes */}
             <Route 
               path="/admin/*" 
               element={
@@ -83,7 +76,6 @@ function App() {
               } 
             />
 
-            {/* Staff Routes */}
             <Route 
               path="/staff/*" 
               element={
@@ -106,7 +98,6 @@ function App() {
               } 
             />
 
-            {/* Customer Routes */}
             <Route 
               path="/dashboard/*" 
               element={
@@ -133,7 +124,6 @@ function App() {
               } 
             />
 
-            {/* Customer Feedback Route (Dedicated) */}
             <Route 
               path="/customer/give-feedback/:jobCardId" 
               element={

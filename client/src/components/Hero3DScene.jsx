@@ -3,31 +3,21 @@ import { useRef } from "react"
 import { Wrench, Calendar, Car, CreditCard, Users, BarChart3 } from "lucide-react"
 
 export default function Hero3DScene() {
-  // ----- MOUSE PARALLAX SETUP -----
-  // Create motion values for mouse X and Y position (0 to 1 relative to container)
   const mouseX = useMotionValue(0.5)
   const mouseY = useMotionValue(0.5)
   
-  // Use spring for smooth damped motion (not jerky/robotic)
-  // stiffness/damping/mass control the physics feel
   const springConfig = { stiffness: 100, damping: 20, mass: 0.5 }
   const smoothX = useSpring(mouseX, springConfig)
   const smoothY = useSpring(mouseY, springConfig)
   
-  // Transform mouse position into rotation values for dashboard panel
-  // We map the 0-1 range to specific degree outputs
-  // Mouse at left (0) = rotate Y -20deg, right (1) = rotate Y -10deg
   const dashboardRotateY = useTransform(smoothX, [0, 1], [-20, -10])
-  // Mouse at top (0) = rotate X 12deg, bottom (1) = rotate X 4deg
   const dashboardRotateX = useTransform(smoothY, [0, 1], [12, 4])
   
-  // Floating card parallax: smaller translation shifts (max 8 pixels)
   const cardShiftX = useTransform(smoothX, [0, 1], [-8, 8])
   const cardShiftY = useTransform(smoothY, [0, 1], [-8, 8])
   
   const containerRef = useRef(null)
   
-  // Mouse move handler — calculates relative position percentage
   const handleMouseMove = (e) => {
     if (!containerRef.current) return
     const rect = containerRef.current.getBoundingClientRect()
@@ -37,13 +27,11 @@ export default function Hero3DScene() {
     mouseY.set(y)
   }
   
-  // Return everything to rest position (0.5 center) when mouse leaves container
   const handleMouseLeave = () => {
     mouseX.set(0.5)
     mouseY.set(0.5)
   }
   
-  // Floating cards data - Icons and positions for the orbiting elements
   const floatingCardsData = [
     { icon: Wrench,     label: "Job Cards",  top: "-8%",  left: "-12%", delay: 0.8,  floatDuration: 3.2 },
     { icon: Calendar,   label: "Bookings",   top: "-5%",  right: "-10%",delay: 1.0,  floatDuration: 3.8 },
@@ -51,18 +39,14 @@ export default function Hero3DScene() {
     { icon: CreditCard, label: "Payments",   bottom: "-10%",right: "-12%",delay: 1.4,  floatDuration: 4.0 },
   ]
 
-  // Component rendering
   return (
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="relative w-full h-[400px] lg:h-[500px] flex items-center justify-center overflow-hidden"
-      // perspective must be on parent for child 3D rotations to look "deep"
       style={{ perspective: "1200px" }}
     >
-      {/* ===== BACKGROUND GLOW ORB ===== */}
-      {/* pointer-events-none ensures the glowing aura doesn't block mouse move events */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.4, rotate: 360 }}
@@ -76,24 +60,19 @@ export default function Hero3DScene() {
                         from-cyan-400 via-blue-500 to-purple-500 blur-3xl opacity-40" />
       </motion.div>
       
-      {/* ===== TILTED DASHBOARD MOCKUP ===== */}
       <motion.div
-        // Entrance animation: scale up and fade in
         initial={{ opacity: 0, scale: 0.8, y: 40 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
         style={{
-          // Apply mouse-based rotations
           rotateY: dashboardRotateY,
           rotateX: dashboardRotateX,
-          // preserve-3d allows nested children to maintain their own 3D placement
           transformStyle: "preserve-3d",
         }}
         className="relative w-[340px] lg:w-[380px] h-[300px] lg:h-[340px] rounded-2xl border border-cyan-400/20 
                    bg-gradient-to-br from-slate-900 to-slate-950 
                    shadow-2xl shadow-cyan-500/30 overflow-hidden scale-90 lg:scale-100"
       >
-        {/* Dashboard top bar UI */}
         <div className="flex items-center gap-2 px-4 py-3 border-b border-slate-800 bg-slate-900/80">
           <div className="flex gap-1.5 text-center">
             <div className="w-2.5 h-2.5 rounded-full bg-rose-500" />
@@ -105,7 +84,6 @@ export default function Hero3DScene() {
           </div>
         </div>
         
-        {/* Main Dashboard Content Mockup */}
         <div className="p-4">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-6 h-6 rounded-md bg-gradient-to-br from-cyan-400 to-blue-500 
@@ -116,7 +94,6 @@ export default function Hero3DScene() {
             <span className="ml-auto text-[10px] text-slate-500">Admin</span>
           </div>
           
-          {/* Card stats built for visual completeness */}
           <div className="grid grid-cols-3 gap-2 mb-4">
             <div className="bg-slate-800/60 border border-slate-700 rounded-lg p-2">
               <Users size={12} className="text-cyan-400 mb-1" />
@@ -135,7 +112,6 @@ export default function Hero3DScene() {
             </div>
           </div>
           
-          {/* Animated fake chart bars */}
           <div className="bg-slate-800/40 border border-slate-700 rounded-lg p-3 mb-3">
             <div className="flex items-end gap-1.5 h-12">
               {(() => {
@@ -145,7 +121,6 @@ export default function Hero3DScene() {
                   bars.push(
                     <motion.div
                       key={i}
-                      // Staggered entrance height animation
                       initial={{ height: 0 }}
                       animate={{ height: `${heights[i]}%` }}
                       transition={{ duration: 0.5, delay: 1.5 + (i * 0.1) }}
@@ -158,7 +133,6 @@ export default function Hero3DScene() {
             </div>
           </div>
           
-          {/* Table list mockup */}
           <div className="space-y-1.5">
             <div className="flex items-center gap-2 px-2 py-1.5 bg-slate-800/40 rounded-md">
               <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
@@ -178,19 +152,16 @@ export default function Hero3DScene() {
           </div>
         </div>
         
-        {/* Glow accent line at bottom */}
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r 
                         from-transparent via-cyan-400 to-transparent opacity-60" />
       </motion.div>
       
-      {/* ===== FLOATING ICON CARDS ===== */}
       {(() => {
         const cards = [];
         for (let i = 0; i < floatingCardsData.length; i++) {
           const card = floatingCardsData[i];
           const Icon = card.icon;
           cards.push(
-            // PARALLAX WRAPPER: Handles cursor-based X/Y shift
             <motion.div
               key={i}
               style={{
@@ -202,7 +173,6 @@ export default function Hero3DScene() {
                 x: cardShiftX,
                 y: cardShiftY,
               }}
-              // Bounce entrance animation
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{
@@ -210,8 +180,6 @@ export default function Hero3DScene() {
                 scale:   { duration: 0.5, delay: card.delay, ease: "backOut" },
               }}
             >
-              {/* FLOAT WRAPPER: Handles the continuous vertical bobbing effect */}
-              {/* Nested divs are needed because both parallax and bobbing try to control 'y' */}
               <motion.div
                 animate={{ y: [0, -12, 0] }}
                 transition={{

@@ -9,7 +9,6 @@ import Button from "../../components/ui/Button.jsx";
 import Input from "../../components/ui/Input.jsx";
 
 const Login = () => {
-  // 1. State hooks for managing form input values
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -18,20 +17,16 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // 2. Function to handle the form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
     try {
-      // Execute the login request through our auth service
       const data = await loginUser({ email, password });
 
-      // Save user details and token to the global AuthContext
       login(data.user, data.token);
 
-      // 3. User Role Based Routing Logic
       if (data.user.role === 'admin') {
         navigate('/admin');
       } else if (data.user.role === 'staff') {
@@ -48,7 +43,6 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-slate-950 px-4 relative overflow-hidden font-sans">
-      {/* Dynamic Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-500/10 blur-[120px] rounded-full" />

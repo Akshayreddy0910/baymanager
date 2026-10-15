@@ -1,14 +1,11 @@
 import api from './api.js';
 
-// Service to handle all booking-related API calls
 export const getAllBookings = async () => {
-  // Global list for administrators
   const response = await api.get('/bookings');
   return response.data;
 };
 
 export const getMyBookings = async () => {
-  // Specific list for the logged-in customer
   const response = await api.get('/bookings/my');
   return response.data;
 };

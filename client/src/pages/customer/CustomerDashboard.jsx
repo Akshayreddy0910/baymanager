@@ -16,12 +16,10 @@ const CustomerDashboard = () => {
   const { user } = useAuth();
   const socket = useSocket();
   const navigate = useNavigate();
-  // Preserve state shape, added activeServices for the new design
   const [stats, setStats] = useState({ bookings: 0, activeServices: 0, pendingPayments: 0 });
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Tailwind purge safety: lookup object for dynamic colors
   const colorClasses = {
     cyan:    { bg: "bg-cyan-400/10",    border: "border-cyan-400/20",    text: "text-cyan-400" },
     amber:   { bg: "bg-amber-400/10",   border: "border-amber-400/20",   text: "text-amber-400" },
@@ -31,7 +29,6 @@ const CustomerDashboard = () => {
     purple:  { bg: "bg-purple-400/10",  border: "border-purple-400/20",  text: "text-purple-400" },
   };
 
-  // 1. Fetch user specific data - Preserving logic and adding activeCount computation
   const loadData = async () => {
     try {
       const myBookings = await getMyBookings();
@@ -41,7 +38,6 @@ const CustomerDashboard = () => {
       let activeCount = 0;
       let initialNotes = [];
 
-      // Compute invoice notifications and counts
       for (let j = 0; j < myInvoices.length; j++) {
           if (myInvoices[j].paymentStatus === 'Pending') {
               pendingCount++;
@@ -56,7 +52,6 @@ const CustomerDashboard = () => {
           }
       }
 
-      // Compute booking notifications and active count
       for (let i = 0; i < myBookings.length; i++) {
           const status = myBookings[i].status;
           if (status === 'Pending' || status === 'Confirmed' || status === 'In Progress') {
@@ -80,7 +75,6 @@ const CustomerDashboard = () => {
         pendingPayments: pendingCount 
       });
 
-      // Sort newest notifications first
       initialNotes.sort((a,b) => new Date(b.time) - new Date(a.time));
       setNotifications(initialNotes);
       setLoading(false);
@@ -94,7 +88,6 @@ const CustomerDashboard = () => {
     loadData();
   }, [user.id]);
 
-  // 2. Real-time Notification listener - Kept byte-for-byte logic
   useEffect(() => {
     if (!socket || !user) return;
 
@@ -180,7 +173,6 @@ const CustomerDashboard = () => {
     </div>
   );
 
-  // Compute stat cards for the redesigned layout
   const statCards = [
     { label: "Total Bookings", value: stats.bookings, icon: Calendar, color: "cyan", delay: 0.1 },
     { label: "Active Services", value: stats.activeServices, icon: Activity, color: "blue", delay: 0.2 },
@@ -191,7 +183,6 @@ const CustomerDashboard = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* ===== HEADER ===== */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -209,7 +200,6 @@ const CustomerDashboard = () => {
           </div>
         </motion.div>
 
-        {/* ===== STAT CARDS ===== */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           {statCards.map((card, i) => {
             const Icon = card.icon;
@@ -239,7 +229,6 @@ const CustomerDashboard = () => {
           })}
         </div>
 
-        {/* ===== QUICK ACTIONS ===== */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -252,7 +241,6 @@ const CustomerDashboard = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            {/* Action 1: Book Service */}
             <Card className="hover:shadow-glow-cyan-sm hover:border-cyan-400/50 hover:-translate-y-1 transition-all duration-300 cursor-pointer group">
               <div onClick={() => navigate("/dashboard/book")}>
                 <div className="w-12 h-12 rounded-xl bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center mb-4">
@@ -266,7 +254,6 @@ const CustomerDashboard = () => {
               </div>
             </Card>
 
-            {/* Action 2: My Bookings */}
             <Card className="hover:shadow-glow-cyan-sm hover:border-blue-400/50 hover:-translate-y-1 transition-all duration-300 cursor-pointer group">
               <div onClick={() => navigate("/dashboard/bookings")}>
                 <div className="w-12 h-12 rounded-xl bg-blue-400/10 border border-blue-400/20 flex items-center justify-center mb-4">
@@ -280,7 +267,6 @@ const CustomerDashboard = () => {
               </div>
             </Card>
 
-            {/* Action 3: My Invoices */}
             <Card className="hover:shadow-glow-cyan-sm hover:border-amber-400/50 hover:-translate-y-1 transition-all duration-300 cursor-pointer group">
               <div onClick={() => navigate("/dashboard/invoices")}>
                 <div className="w-12 h-12 rounded-xl bg-amber-400/10 border border-amber-400/20 flex items-center justify-center mb-4">
@@ -296,7 +282,6 @@ const CustomerDashboard = () => {
           </div>
         </motion.div>
 
-        {/* ===== NOTIFICATIONS SECTION ===== */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}

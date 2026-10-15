@@ -2,7 +2,6 @@ import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import { getIO } from '../server.js';
 
-// Get all users who have the 'staff' role
 export const getAllStaff = async (req, res) => {
   try {
     const staff = await User.find({ role: 'staff' }).select('-password');
@@ -12,12 +11,10 @@ export const getAllStaff = async (req, res) => {
   }
 };
 
-// Create a new staff member
 export const addStaff = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Validation using a for loop
     const required = ['name', 'email', 'password'];
     for (let i = 0; i < required.length; i++) {
         if (!req.body[required[i]]) {
@@ -56,7 +53,6 @@ export const addStaff = async (req, res) => {
   }
 };
 
-// Update existing staff details
 export const updateStaff = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -89,7 +85,6 @@ export const updateStaff = async (req, res) => {
   }
 };
 
-// Remove a staff member
 export const deleteStaff = async (req, res) => {
   try {
     const staff = await User.findById(req.params.id);
@@ -97,8 +92,6 @@ export const deleteStaff = async (req, res) => {
         return res.status(404).json({ message: 'Staff member not found' });
     }
 
-    // Since staff records are stored directly in the Users collection (filtered by role), 
-    // deleting here removes the login account as well.
     await User.findByIdAndDelete(req.params.id);
 
     const io = getIO();

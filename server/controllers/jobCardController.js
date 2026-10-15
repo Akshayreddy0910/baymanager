@@ -1,9 +1,8 @@
 import JobCard from '../models/JobCard.js';
 import Booking from '../models/Booking.js';
 import { sendEmail } from '../config/mailer.js';
-import { getIO } from '../server.js'; // Import IO for real-time sync
+import { getIO } from '../server.js';
 
-// Controller for admins to create a new job card for a mechanic
 export const createJobCard = async (req, res) => {
   try {
     const { bookingId, mechanicId, tasks } = req.body;
@@ -21,7 +20,6 @@ export const createJobCard = async (req, res) => {
       tasks,
     });
 
-    // Populate for the real-time update
     const populatedJobCard = await JobCard.findById(jobCard._id)
       .populate({
           path: 'bookingId',
@@ -29,7 +27,6 @@ export const createJobCard = async (req, res) => {
       })
       .populate('mechanicId', 'name email');
 
-    // REAL-TIME: Emit event for admin and staff dashboards
     const io = getIO();
     if (io) {
         io.emit('jobCard:created', populatedJobCard);
@@ -90,7 +87,6 @@ export const updateJobCardStatus = async (req, res) => {
 
     await jobCard.save();
 
-    // Fetch again with full population for the live update
     const updatedJobCard = await JobCard.findById(req.params.id)
       .populate({
           path: 'bookingId',
@@ -98,29 +94,23 @@ export const updateJobCardStatus = async (req, res) => {
       })
       .populate('mechanicId', 'name email');
 
-    // REAL-TIME: Emit update event
     const io = getIO();
     if (io) {
         io.emit('jobCard:updated', updatedJobCard);
     }
 
-    // --- AUTOMATION LOGIC (Sync Booking Status + Email) ---
     if (status && status !== oldStatus) {
         try {
             const fullBooking = updatedJobCard.bookingId;
             if (fullBooking) {
-                // 1. Map JobCard status to Booking status
-                // We keep them identical for better visibility
                 await Booking.findByIdAndUpdate(fullBooking._id, { status: status });
                 
-                // 2. REAL-TIME: Emit booking:updated event
                 if (io) {
                     const freshBooking = await Booking.findById(fullBooking._id).populate('vehicleId customerId');
                     io.emit('booking:updated', freshBooking);
                 }
             }
 
-            // 3. SPECIAL CASE: Completion Email
             if (status === 'Completed' && oldStatus !== 'Completed') {
                 if (fullBooking && fullBooking.customerId?.email) {
                     const htmlContent = `
@@ -155,7 +145,6 @@ export const deleteJobCard = async (req, res) => {
       return res.status(404).json({ message: 'Job card not found' });
     }
 
-    // REAL-TIME: Emit deletion event
     const io = getIO();
     if (io) {
         io.emit('jobCard:deleted', req.params.id);

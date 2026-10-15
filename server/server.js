@@ -17,7 +17,7 @@ import jobCardRoutes from './routes/jobCardRoutes.js';
 import invoiceRoutes from './routes/invoiceRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
-import staffRoutes from './routes/staffRoutes.js'; // Added staff management
+import staffRoutes from './routes/staffRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
 
 dotenv.config();
@@ -30,7 +30,7 @@ app.use(express.json());
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "*", // Using wildcard wildcard to match standard REST cors() middleware behavior and bypass dynamic Vite port swapping
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"]
   }
 });
@@ -56,7 +56,7 @@ app.use('/api/jobcards', jobCardRoutes);
 app.use('/api/invoices', invoiceRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/reports', reportRoutes);
-app.use('/api/staff', staffRoutes); // Mounting staff management
+app.use('/api/staff', staffRoutes);
 app.use('/api/feedback', feedbackRoutes);
 
 app.get('/', (req, res) => {

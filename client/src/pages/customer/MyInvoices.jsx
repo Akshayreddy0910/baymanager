@@ -14,16 +14,14 @@ const MyInvoices = () => {
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
-  const [payingId, setPayingId] = useState(null); // Track which invoice is being paid
+  const [payingId, setPayingId] = useState(null);
   
-  // feedbackStatus stores { [jobCardId]: boolean } to track if review exists
   const [feedbackStatus, setFeedbackStatus] = useState({});
   const [checkingFeedback, setCheckingFeedback] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Design System: Status styles for dynamic badges
   const statusStyles = {
     "Pending":     { bg: "bg-amber-400/10",   text: "text-amber-400",   border: "border-amber-400/20" },
     "Confirmed":   { bg: "bg-blue-400/10",    text: "text-blue-400",    border: "border-blue-400/20" },
@@ -38,18 +36,15 @@ const MyInvoices = () => {
     return `rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider ${s.bg} ${s.text} ${s.border} border shadow-sm`;
   };
 
-  // 1. Fetch user invoices - Preserving logic and adding feedback check loop
   const loadData = async () => {
     try {
       const data = await getMyInvoices();
       setInvoices(data);
       setLoading(false);
       
-      // After invoices are loaded, check feedback status for each job card
       if (data.length > 0) {
         setCheckingFeedback(true);
         const statuses = {};
-        // Use a for loop to sequentially check feedback for each job
         for (let i = 0; i < data.length; i++) {
           const inv = data[i];
           const jcId = inv.jobCardId?._id || inv.jobCardId;
@@ -74,7 +69,6 @@ const MyInvoices = () => {
   useEffect(() => {
     loadData();
 
-    // 2. Handle Stripe Success redirect back to this page - Preserving logic
     const query = new URLSearchParams(location.search);
     const success = query.get('success');
     const invoiceId = query.get('invoiceId');
@@ -84,10 +78,8 @@ const MyInvoices = () => {
     if (success === 'true' && invoiceId) {
         const handleSuccessRedirect = async () => {
             try {
-                // Mark the invoice as paid in BayManager's database
                 await markAsPaid(invoiceId);
                 
-                // Immediately transition user to the feedback screen if we have the jobCardId
                 if (jobCardIdParam) {
                     navigate(`/customer/give-feedback/${jobCardIdParam}`, { replace: true, state: { paymentSuccess: true } });
                 } else {
@@ -107,12 +99,11 @@ const MyInvoices = () => {
     }
   }, [location.search]);
 
-  // 3. Stripe Payment Handler - Preserving exact function name and logic
   const handlePayment = async (invId) => {
     try {
-        setPayingId(invId); // Show spinner on this invoice's button
+        setPayingId(invId);
         const stripeUrl = await createCheckoutSession(invId);
-        window.location.href = stripeUrl; // Redirect to Stripe Checkout
+        window.location.href = stripeUrl;
     } catch (err) {
         setPayingId(null);
         alert("Payment could not be started: " + (err.response?.data?.message || "Please try again."));
@@ -132,7 +123,6 @@ const MyInvoices = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-purple-500/30">
       <div className="max-w-5xl mx-auto px-6 py-12">
         
-        {/* ===== HEADER ===== */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -153,7 +143,6 @@ const MyInvoices = () => {
             </p>
           </motion.div>
 
-          {/* ===== TEST MODE CARD NOTICE ===== */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9, x: 20 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -184,7 +173,6 @@ const MyInvoices = () => {
           </motion.div>
         </div>
 
-        {/* ===== SUCCESS BANNER ===== */}
         {paymentSuccess && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
@@ -209,7 +197,6 @@ const MyInvoices = () => {
           </motion.div>
         )}
 
-        {/* ===== LIST CONTENT ===== */}
         {invoices.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -255,14 +242,12 @@ const MyInvoices = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
                   <Card className={`group relative overflow-hidden transition-all duration-500 ${isPaid ? 'border-emerald-500/20 bg-emerald-500/[0.02]' : 'hover:border-purple-500/30 hover:bg-white/[0.02]'}`}>
-                    {/* Progress indicator border for unpaid */}
                     {!isPaid && (
                       <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-600 to-blue-600" />
                     )}
                     
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 p-1">
                       
-                      {/* Left Side: Invoice info */}
                       <div className="flex items-center gap-8">
                         <div className={`relative w-24 h-24 rounded-[2.5rem] flex items-center justify-center flex-shrink-0 shadow-inner border-2 transition-transform group-hover:scale-105 duration-500 ${isPaid ? 'bg-emerald-400/10 border-emerald-400/20 text-emerald-400' : 'bg-purple-600/10 border-purple-400/20 text-purple-400'}`}>
                            <FileText size={38} />
@@ -307,7 +292,6 @@ const MyInvoices = () => {
                         </div>
                       </div>
 
-                      {/* Right Side: Action Buttons */}
                       <div className="flex flex-wrap items-center gap-4 lg:flex-shrink-0 lg:ml-auto">
                         
                         {!isPaid && (
@@ -376,7 +360,6 @@ const MyInvoices = () => {
           </div>
         )}
         
-        {/* Security Trust Badge */}
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

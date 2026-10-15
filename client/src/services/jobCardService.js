@@ -1,14 +1,11 @@
 import api from './api.js';
 
-// Service to handle all job card-related API calls
 export const getAllJobCards = async () => {
-    // Fetches all job cards (Admin view)
     const response = await api.get('/jobcards/all');
     return response.data;
 };
 
 export const getMyJobCards = async () => {
-    // Fetches job cards assigned to the logged-in mechanic
     const response = await api.get('/jobcards/my');
     return response.data;
 };

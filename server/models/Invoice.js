@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-// Schema for generating billing invoices for completed garage work
 const invoiceSchema = new mongoose.Schema(
   {
     jobCardId: {

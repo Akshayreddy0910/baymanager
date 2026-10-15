@@ -10,12 +10,11 @@ import Button from "../../components/ui/Button.jsx";
 const MyJobCards = () => {
   const [jobCards, setJobCards] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // Added for error state handling
+  const [error, setError] = useState(null);
 
   const socket = useSocket();
   const { user } = useAuth();
 
-  // Tailwind purge safety: style lookup object for status badges
   const statusStyles = {
     "Open":        { bg: "bg-blue-400/10",    text: "text-blue-400",    border: "border-blue-400/20" },
     "In Progress": { bg: "bg-amber-400/10",   text: "text-amber-400",   border: "border-amber-400/20" },
@@ -23,13 +22,11 @@ const MyJobCards = () => {
     "Pending":     { bg: "bg-slate-400/10",   text: "text-slate-400",   border: "border-slate-400/20" },
   };
 
-  // Helper to get badge classes for a given status
   const getBadgeClasses = (status) => {
     const s = statusStyles[status] || statusStyles["Pending"];
     return `rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider ${s.bg} ${s.text} ${s.border} border`;
   };
 
-  // 1. Load assignments
   const loadData = async () => {
     try {
       const data = await getMyJobCards();
@@ -44,7 +41,6 @@ const MyJobCards = () => {
 
   useEffect(() => { loadData(); }, []);
 
-  // 1.5 Real-time Synchronization
   useEffect(() => {
     if (!socket || !user) return;
     const myId = String(user?._id || user?.id);
@@ -81,9 +77,7 @@ const MyJobCards = () => {
     };
   }, [socket, user]);
 
-  // 2. Inline task status update logic - Preserving byte-for-byte logic
   const toggleTask = async (jcId, taskIdx) => {
-    // Find the specific job card in state using a for loop as per design rules
     let targetJC = null;
     for (let i = 0; i < jobCards.length; i++) {
         if (jobCards[i]._id === jcId) {
@@ -94,11 +88,9 @@ const MyJobCards = () => {
 
     if (!targetJC) return;
 
-    // Clone and update the specific task status
     const updatedTasks = [...targetJC.tasks];
     updatedTasks[taskIdx].status = updatedTasks[taskIdx].status === 'Completed' ? 'Pending' : 'Completed';
 
-    // 3. Check if all tasks are done to auto-update JC status via for loop
     let allDone = true;
     for (let j = 0; j < updatedTasks.length; j++) {
         if (updatedTasks[j].status !== 'Completed') {
@@ -116,7 +108,6 @@ const MyJobCards = () => {
     }
   };
 
-  // Wrapper for manual status change if needed - uses original updateJobCardStatus handler logic
   const handleManualStatusUpdate = async (jcId, newStatus) => {
       try {
           await updateJobCardStatus(jcId, { status: newStatus });
@@ -136,7 +127,6 @@ const MyJobCards = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* ===== HEADER ===== */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -150,7 +140,6 @@ const MyJobCards = () => {
           </p>
         </motion.div>
         
-        {/* ===== ERROR STATE ===== */}
         {error && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8">
             <Card className="border-rose-500/30 bg-rose-500/5">
@@ -162,7 +151,6 @@ const MyJobCards = () => {
           </motion.div>
         )}
         
-        {/* ===== EMPTY STATE ===== */}
         {!loading && !error && jobCards.length === 0 && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-8">
             <Card className="text-center py-20 border-dashed border-slate-800">
@@ -179,7 +167,6 @@ const MyJobCards = () => {
           </motion.div>
         )}
         
-        {/* ===== JOB CARDS LIST ===== */}
         {!loading && !error && jobCards.length > 0 && (
           <div className="mt-12 space-y-6">
             {jobCards.map((job, index) => (
@@ -191,7 +178,6 @@ const MyJobCards = () => {
               >
                 <Card className="hover:shadow-glow-cyan-sm hover:border-cyan-400/30 hover:-translate-y-0.5 transition-all duration-300">
                   
-                  {/* Top row: Service + Status */}
                   <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-6">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
@@ -222,7 +208,6 @@ const MyJobCards = () => {
                         <span className={getBadgeClasses(job.status)}>
                           {job.status}
                         </span>
-                        {/* Styled manual status selector */}
                         <select
                           value={job.status}
                           onChange={(e) => handleManualStatusUpdate(job._id, e.target.value)}
@@ -235,7 +220,6 @@ const MyJobCards = () => {
                     </div>
                   </div>
                   
-                  {/* Tasks list (conditionally shown) */}
                   {job.tasks && job.tasks.length > 0 && (
                     <div className="mb-6 pt-6 border-t border-slate-800/50">
                       <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
@@ -267,7 +251,6 @@ const MyJobCards = () => {
                     </div>
                   )}
                   
-                  {/* Metadata action row */}
                   <div className="flex items-center justify-between pt-6 border-t border-slate-800/50">
                     <div className="text-[10px] font-mono font-bold text-slate-500 flex items-center gap-2 uppercase tracking-widest">
                       <Clock size={12} />

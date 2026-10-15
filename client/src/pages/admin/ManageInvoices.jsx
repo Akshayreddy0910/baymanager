@@ -13,7 +13,6 @@ import Button from "../../components/ui/Button.jsx";
 import Input from "../../components/ui/Input.jsx";
 
 const ManageInvoices = () => {
-  // 1. Data and State - Preserving existing variable names
   const [invoices, setInvoices] = useState([]);
   const [jobCards, setJobCards] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,13 +21,11 @@ const ManageInvoices = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({ jobCardId: '', serviceCost: '', laborCost: '' });
 
-  // Design System: Status Styles
   const statusStyles = {
     'Paid':    { text: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/20", icon: CheckCircle },
     'Pending': { text: "text-rose-400",    bg: "bg-rose-400/10",    border: "border-rose-400/20",    icon: Clock },
   };
 
-  // 1. Fetch data
   const loadData = async () => {
     try {
       const [iData, jcData] = await Promise.all([getAllInvoices(), getAllJobCards()]);
@@ -43,7 +40,6 @@ const ManageInvoices = () => {
 
   useEffect(() => { loadData(); }, []);
 
-  // 2. Real-time Synchronization
   useEffect(() => {
     if (!socket) return;
 
@@ -66,7 +62,6 @@ const ManageInvoices = () => {
     };
   }, [socket]);
 
-  // 3. Actions
   const handleSave = async (e) => {
     e.preventDefault();
     try {
@@ -103,7 +98,6 @@ const ManageInvoices = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* ===== HEADER ===== */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -129,7 +123,6 @@ const ManageInvoices = () => {
           </Button>
         </motion.div>
 
-        {/* ===== INVOICE LEDGER ===== */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -222,7 +215,6 @@ const ManageInvoices = () => {
           )}
         </motion.div>
 
-        {/* ===== GENERATION MODAL ===== */}
         <AnimatePresence>
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-6">

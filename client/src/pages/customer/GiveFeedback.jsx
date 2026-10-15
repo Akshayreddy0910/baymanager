@@ -7,32 +7,23 @@ import Button from "../../components/ui/Button.jsx";
 import StarRating from "../../components/ui/StarRating.jsx";
 import { submitFeedback, checkFeedbackExists } from "../../services/feedbackService.js";
 
-/**
- * GiveFeedback Page
- * Allows customers to submit reviews for their completed service bookings.
- * features duplicate checks on mount and a polished interactive form.
- */
 const GiveFeedback = () => {
-  // Extract jobCardId from URL parameters
   const { jobCardId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const paymentSuccessParam = location.state?.paymentSuccess;
 
-  // 1. Form state variables
   const [garageRating, setGarageRating] = useState(0);
   const [mechanicRating, setMechanicRating] = useState(0);
   const [comment, setComment] = useState("");
   const [wouldRecommend, setWouldRecommend] = useState(true);
 
-  // 2. Lifecycle & status states
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [alreadySubmitted, setAlreadySubmitted] = useState(false);
   const [checkLoading, setCheckLoading] = useState(true);
 
-  // 3. Prevent duplicate submissions by checking existence on mount
   useEffect(() => {
     const checkStatus = async () => {
       try {
@@ -49,11 +40,9 @@ const GiveFeedback = () => {
     checkStatus();
   }, [jobCardId]);
 
-  // 4. Handle form submission with validation
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validation: Both ratings are mandatory
     if (garageRating === 0 || mechanicRating === 0) {
       setError("Please provide both ratings to help us improve!");
       return;
@@ -70,7 +59,6 @@ const GiveFeedback = () => {
         comment, 
         wouldRecommend 
       });
-      // Success state triggers the "Thank You" view
       setSubmitted(true);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to submit feedback. Please try again.");
@@ -79,7 +67,6 @@ const GiveFeedback = () => {
     }
   };
 
-  // Initial gate for checking if feedback was already provided
   if (checkLoading) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-100">
@@ -89,7 +76,6 @@ const GiveFeedback = () => {
     );
   }
 
-  // Already submitted state
   if (alreadySubmitted) {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center px-6">
@@ -113,7 +99,6 @@ const GiveFeedback = () => {
     );
   }
 
-  // Post-submission success state
   if (submitted) {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center px-6">
@@ -143,12 +128,10 @@ const GiveFeedback = () => {
     );
   }
 
-  // Render the Feedback Form
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="max-w-2xl mx-auto px-6 py-12">
         
-        {/* Navigation / Header */}
         <Button 
           variant="ghost" 
           size="sm"
@@ -162,7 +145,6 @@ const GiveFeedback = () => {
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }}
         >
-          {/* Incoming Payment Success Banner */}
           {paymentSuccessParam && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -191,7 +173,6 @@ const GiveFeedback = () => {
           <Card>
             <form onSubmit={handleSubmit} className="space-y-8">
               
-              {/* Garage Rating Section */}
               <div className="space-y-3">
                 <label className="text-slate-300 font-bold block">
                   How would you rate the garage overall?
@@ -205,7 +186,6 @@ const GiveFeedback = () => {
                 </div>
               </div>
               
-              {/* Mechanic Rating Section */}
               <div className="space-y-3">
                 <label className="text-slate-300 font-bold block">
                   How would you rate the mechanic's work?
@@ -219,7 +199,6 @@ const GiveFeedback = () => {
                 </div>
               </div>
               
-              {/* Comment Input */}
               <div>
                 <label className="text-slate-400 text-xs font-black uppercase tracking-widest mb-3 block">
                   Additional Comments (optional)
@@ -242,7 +221,6 @@ const GiveFeedback = () => {
                 </div>
               </div>
               
-              {/* Recommendation Checkbox */}
               <div className="flex items-center gap-4 bg-slate-800/30 p-4 rounded-2xl cursor-pointer hover:bg-slate-800/50 transition-colors" onClick={() => setWouldRecommend(!wouldRecommend)}>
                 <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${wouldRecommend ? 'bg-cyan-500 border-cyan-500' : 'border-slate-700'}`}>
                   {wouldRecommend && <CheckCircle size={16} className="text-white" />}
@@ -252,7 +230,6 @@ const GiveFeedback = () => {
                 </label>
               </div>
               
-              {/* Error Alert Display */}
               {error && (
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }} 
@@ -265,7 +242,6 @@ const GiveFeedback = () => {
                 </motion.div>
               )}
               
-              {/* Submission Control */}
               <Button 
                 type="submit" 
                 variant="primary" 

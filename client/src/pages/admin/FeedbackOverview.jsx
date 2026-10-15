@@ -9,13 +9,11 @@ import StarRating from '../../components/ui/StarRating.jsx';
 import Card from "../../components/ui/Card.jsx";
 
 const FeedbackOverview = () => {
-  // 1. Data and UI State - Preserving existing names from the functional version
   const [stats, setStats] = useState(null);
   const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // 2. Load all feedback data and dashboard stats in parallel
   useEffect(() => {
     const loadDashboard = async () => {
       try {
@@ -34,7 +32,6 @@ const FeedbackOverview = () => {
     loadDashboard();
   }, []);
 
-  // Show a premium loading state
   if (loading) return (
     <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center">
         <MessageSquare size={40} className="text-purple-400 animate-spin mb-4 shadow-glow-purple-sm" />
@@ -42,7 +39,6 @@ const FeedbackOverview = () => {
     </div>
   );
 
-  // Handle Error State
   if (error) return (
     <div className="min-h-screen bg-slate-950 p-8 flex items-center justify-center">
         <Card className="max-w-md border-rose-500/30 text-center p-12">
@@ -55,7 +51,6 @@ const FeedbackOverview = () => {
     </div>
   );
 
-  // Handle Empty State
   if (!stats || stats.overall.totalFeedbacks === 0) return (
     <div className="min-h-screen bg-slate-950 p-12">
         <h1 className="text-4xl font-display font-bold text-slate-100 uppercase tracking-tighter mb-12">
@@ -71,7 +66,6 @@ const FeedbackOverview = () => {
     </div>
   );
 
-  // Rank coloring helper
   const getRankStyle = (index) => {
     if (index === 0) return { border: "border-amber-400/30", bg: "bg-amber-400/10", text: "text-amber-400", shadow: "shadow-glow-amber-sm" };
     if (index === 1) return { border: "border-slate-300/30", bg: "bg-slate-300/10", text: "text-slate-300", shadow: "shadow-glow-slate-sm" };
@@ -83,7 +77,6 @@ const FeedbackOverview = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* ===== HEADER ===== */}
         <motion.div
            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
            className="flex flex-col md:flex-row md:items-center justify-between gap-6"
@@ -103,7 +96,6 @@ const FeedbackOverview = () => {
           </div>
         </motion.div>
 
-        {/* ===== PERFORMANCE SUMMARY ===== */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-12">
             {[
                 { label: "Garage Performance", value: stats.overall.avgGarageRating, icon: Star, color: "amber" },
@@ -127,9 +119,7 @@ const FeedbackOverview = () => {
             ))}
         </div>
 
-        {/* ===== MIDDLE SECTION GRID ===== */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-8">
-            {/* Mechanic Leaderboard */}
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4 }}>
                 <Card className="h-full">
                     <div className="flex items-center gap-4 mb-8">
@@ -165,7 +155,6 @@ const FeedbackOverview = () => {
                 </Card>
             </motion.div>
 
-            {/* Rating Distribution */}
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5 }}>
                 <Card className="h-full flex flex-col justify-between">
                     <div className="flex items-center gap-4 mb-8">
@@ -202,7 +191,6 @@ const FeedbackOverview = () => {
             </motion.div>
         </div>
 
-        {/* ===== RECENT FEEDBACK FEED ===== */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
             {stats.recentFeedbacks.map((f, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 + i * 0.05 }}>

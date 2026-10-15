@@ -12,7 +12,6 @@ import Button from "../../components/ui/Button.jsx";
 import Input from "../../components/ui/Input.jsx";
 
 const ManageVehicles = () => {
-  // 1. Data and State - Preserving existing variable names
   const [vehicles, setVehicles] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,7 +22,6 @@ const ManageVehicles = () => {
   const [editingVehicle, setEditingVehicle] = useState(null);
   const [formData, setFormData] = useState({ customerId: '', registrationNumber: '', model: '', year: '' });
 
-  // Design System: Color lookup for consistent aesthetics
   const colorClasses = {
     cyan:    { bg: "bg-cyan-400/10",    border: "border-cyan-400/20",    text: "text-cyan-400" },
     blue:    { bg: "bg-blue-400/10",    border: "border-blue-400/20",    text: "text-blue-400" },
@@ -33,7 +31,6 @@ const ManageVehicles = () => {
     purple:  { bg: "bg-purple-400/10",  border: "border-purple-400/20",  text: "text-purple-400" },
   };
 
-  // 1. Fetch data from backend - Preserving parallel fetch logic
   const loadData = async () => {
     try {
       const [vData, cData] = await Promise.all([getAllVehicles(), getAllCustomers()]);
@@ -48,7 +45,6 @@ const ManageVehicles = () => {
 
   useEffect(() => { loadData(); }, []);
 
-  // 2. WebSocket Sync - Preserving exact listener handling
   useEffect(() => {
     if (!socket) return;
 
@@ -80,7 +76,6 @@ const ManageVehicles = () => {
     };
   }, [socket]);
 
-  // 3. Handlers - Preserving names and logic
   const openModal = (vehicle = null) => {
     if (vehicle) {
       setEditingVehicle(vehicle);
@@ -132,7 +127,6 @@ const ManageVehicles = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* ===== HEADER ===== */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -159,7 +153,6 @@ const ManageVehicles = () => {
           </div>
         </motion.div>
 
-        {/* ===== FLET TABLE ===== */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -254,7 +247,6 @@ const ManageVehicles = () => {
           )}
         </motion.div>
 
-        {/* ===== REGISTRATION MODAL ===== */}
         <AnimatePresence>
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-6">

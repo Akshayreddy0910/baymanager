@@ -11,7 +11,6 @@ const MyBookings = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Design System: Status badge lookup
   const statusStyles = {
     "Pending":     { bg: "bg-amber-400/10",   text: "text-amber-400",   border: "border-amber-400/20" },
     "Confirmed":   { bg: "bg-blue-400/10",    text: "text-blue-400",    border: "border-blue-400/20" },
@@ -26,7 +25,6 @@ const MyBookings = () => {
     return `rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider ${s.bg} ${s.text} ${s.border} border shadow-sm`;
   };
 
-  // 1. Fetch bookings belonging to the current user - Preserving logic
   useEffect(() => {
     const fetchMyBookings = async () => {
       try {
@@ -51,7 +49,6 @@ const MyBookings = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
       <div className="max-w-5xl mx-auto px-6 py-8">
         
-        {/* ===== HEADER ===== */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -76,7 +73,6 @@ const MyBookings = () => {
           </Button>
         </motion.div>
 
-        {/* ===== EMPTY STATE ===== */}
         {!loading && bookings.length === 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -97,7 +93,6 @@ const MyBookings = () => {
           </motion.div>
         )}
 
-        {/* ===== BOOKINGS LIST ===== */}
         {!loading && bookings.length > 0 && (
           <div className="mt-12 space-y-6">
             {bookings.map((b, index) => (
@@ -148,7 +143,6 @@ const MyBookings = () => {
           </div>
         )}
         
-        {/* Footer info */}
         <div className="mt-12 text-center">
             <p className="text-[10px] font-mono font-black text-slate-600 uppercase tracking-[0.2em]">
                 BayManager Service Tracking Interface v2.0

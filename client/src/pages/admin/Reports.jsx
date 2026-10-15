@@ -11,16 +11,13 @@ import Card from "../../components/ui/Card.jsx";
 import Button from "../../components/ui/Button.jsx";
 
 const Reports = () => {
-    // 1. Data and State - Preserving existing names
     const [revenueData, setRevenueData] = useState({ totalRevenue: 0, monthlyStats: [] });
     const [serviceDistribution, setServiceDistribution] = useState([]);
     const [loading, setLoading] = useState(true);
     const socket = useSocket();
 
-    // Design System Chart Colors
     const COLORS = ['#2563eb', '#db2777', '#059669', '#d97706', '#7c3aed', '#4b5563'];
 
-    // Function to fetch analytical data - Preserving logic
     const fetchStats = async () => {
         try {
             const [revRes, servRes] = await Promise.all([
@@ -40,7 +37,6 @@ const Reports = () => {
         fetchStats();
     }, []);
 
-    // 2. Real-time Synchronization - Preserving logic
     useEffect(() => {
         if (!socket) return;
 
@@ -67,7 +63,6 @@ const Reports = () => {
         <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
             <div className="max-w-7xl mx-auto px-6 py-8">
                 
-                {/* ===== HEADER ===== */}
                 <motion.div
                    initial={{ opacity: 0, y: 20 }}
                    animate={{ opacity: 1, y: 0 }}
@@ -93,7 +88,6 @@ const Reports = () => {
                     </Button>
                 </motion.div>
 
-                {/* ===== REVENUE OVERVIEW ===== */}
                 <motion.div
                    initial={{ opacity: 0, y: 20 }}
                    animate={{ opacity: 1, y: 0 }}
@@ -125,9 +119,7 @@ const Reports = () => {
                     </Card>
                 </motion.div>
 
-                {/* ===== CHARTS GRID ===== */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
-                    {/* Monthly Revenue Chart */}
                     <motion.div
                        initial={{ opacity: 0, scale: 0.95 }}
                        animate={{ opacity: 1, scale: 1 }}
@@ -179,7 +171,6 @@ const Reports = () => {
                         </Card>
                     </motion.div>
 
-                    {/* Service distribution Chart */}
                     <motion.div
                        initial={{ opacity: 0, scale: 0.95 }}
                        animate={{ opacity: 1, scale: 1 }}

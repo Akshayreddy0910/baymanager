@@ -12,12 +12,11 @@ export const addVehicle = async (req, res) => {
             email: { $regex: new RegExp("^" + req.user.email + "$", "i") } 
         });
 
-        // If profile doesn't exist, create it automatically (Fallback)
         if (!customerProfile) {
             customerProfile = await Customer.create({
                 name: req.user.name,
                 email: req.user.email.toLowerCase().trim(),
-                phone: 'Not Provided' // Default as it's required in some schemas
+                phone: 'Not Provided'
             });
         }
         customerId = customerProfile._id;
@@ -27,7 +26,6 @@ export const addVehicle = async (req, res) => {
         return res.status(400).json({ message: 'Please select a customer for this vehicle' });
     }
 
-    // --- VALIDATIONS ---
     if (!registrationNumber || !registrationNumber.trim()) {
         return res.status(400).json({ message: 'Registration number is required' });
     }

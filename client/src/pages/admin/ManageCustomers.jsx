@@ -11,7 +11,6 @@ import Button from "../../components/ui/Button.jsx";
 import Input from "../../components/ui/Input.jsx";
 
 const ManageCustomers = () => {
-  // 1. State to track customers and UI flow - Preserving existing names
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const socket = useSocket();
@@ -20,7 +19,6 @@ const ManageCustomers = () => {
   const [editingCustomer, setEditingCustomer] = useState(null);
   const [formData, setFormData] = useState({ name: '', phone: '', email: '', address: '', password: '' });
 
-  // Design System: Color lookup for consistent aesthetics
   const colorClasses = {
     cyan:    { bg: "bg-cyan-400/10",    border: "border-cyan-400/20",    text: "text-cyan-400" },
     blue:    { bg: "bg-blue-400/10",    border: "border-blue-400/20",    text: "text-blue-400" },
@@ -30,7 +28,6 @@ const ManageCustomers = () => {
     purple:  { bg: "bg-purple-400/10",  border: "border-purple-400/20",  text: "text-purple-400" },
   };
 
-  // 1. Fetch data from backend on load - Preserving logic
   const loadData = async () => {
     try {
       const data = await getAllCustomers();
@@ -44,7 +41,6 @@ const ManageCustomers = () => {
 
   useEffect(() => { loadData(); }, []);
 
-  // 2. Real-time Synchronization Effect - Preserving byte-for-byte identical logic
   useEffect(() => {
     if (!socket) return;
 
@@ -90,7 +86,6 @@ const ManageCustomers = () => {
     };
   }, [socket, customers]);
 
-  // 3. Handle CRUD actions - Preserving logic and handler names
   const handleDelete = async (id) => {
     if (window.confirm("Danger: Deleting this customer will also remove their login access. Continue?")) {
       try {
@@ -144,7 +139,6 @@ const ManageCustomers = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* ===== HEADER ===== */}
         <motion.div 
             initial={{ opacity: 0, y: 20 }} 
             animate={{ opacity: 1, y: 0 }} 
@@ -158,7 +152,6 @@ const ManageCustomers = () => {
                 <div className="flex items-center gap-4 mt-2">
                     <p className="text-slate-400 font-medium">Add, edit, and track customer profiles.</p>
                     <div className="h-4 w-px bg-slate-800 hidden md:block" />
-                    {/* Live Sync Indicator */}
                     <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em]">
                         {socket ? (
                             <>
@@ -182,7 +175,6 @@ const ManageCustomers = () => {
           </div>
         </motion.div>
 
-        {/* ===== CUSTOMER GRID ===== */}
         <motion.div 
             initial={{ opacity: 0, y: 20 }} 
             animate={{ opacity: 1, y: 0 }} 
@@ -208,7 +200,6 @@ const ManageCustomers = () => {
                         transition={{ duration: 0.4, delay: Math.min(i * 0.05, 0.8) }}
                     >
                         <Card className="group relative overflow-hidden p-10 hover:border-blue-400/30 transition-all duration-300">
-                            {/* Actions Overlay */}
                             <div className="absolute top-6 right-6 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 transition-transform">
                                 <button onClick={() => openModal(c)} className="p-3 text-slate-400 hover:text-cyan-400 hover:bg-slate-800 rounded-xl transition-all">
                                     <Edit2 size={18} />
@@ -218,7 +209,6 @@ const ManageCustomers = () => {
                                 </button>
                             </div>
 
-                            {/* Avatar / Profile Initials */}
                             <div className="w-16 h-16 bg-slate-900 border border-slate-800 rounded-[1.8rem] flex items-center justify-center text-slate-200 font-display font-bold text-2xl mb-8 group-hover:bg-blue-600/20 group-hover:border-blue-500/30 group-hover:text-blue-400 transition-all">
                                 {c.name.charAt(0)}
                             </div>
@@ -258,11 +248,9 @@ const ManageCustomers = () => {
             )}
         </motion.div>
 
-        {/* ===== ADD/EDIT MODAL ===== */}
         <AnimatePresence>
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
-                    {/* Backdrop */}
                     <motion.div 
                         initial={{ opacity: 0 }} 
                         animate={{ opacity: 1 }} 
@@ -271,7 +259,6 @@ const ManageCustomers = () => {
                         className="absolute inset-0 bg-slate-950/80 backdrop-blur-md"
                     />
                     
-                    {/* Modal Content */}
                     <motion.div 
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -324,7 +311,6 @@ const ManageCustomers = () => {
                                         />
                                     </div>
 
-                                    {/* PASSWORD FIELD */}
                                     <div className="md:col-span-2">
                                         <Input 
                                             label={editingCustomer ? 'Update Password (Leave blank to keep)' : 'Password'} 

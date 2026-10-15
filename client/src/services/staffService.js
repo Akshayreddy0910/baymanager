@@ -1,6 +1,5 @@
 import api from './api.js';
 
-// Service to manage human resources (Mechanics and Staff)
 export const getAllStaff = async () => {
     const response = await api.get('/staff');
     return response.data;
